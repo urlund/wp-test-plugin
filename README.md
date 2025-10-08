@@ -14,8 +14,9 @@ This is a minimal WordPress plugin boilerplate that includes:
 ## Installation
 
 1. Download or clone this repository
-2. Upload the `wp-test-plugin` folder to the `/wp-content/plugins/` directory
-3. Activate the plugin through the 'Plugins' menu in WordPress
+2. Run `composer install` to install dependencies
+3. Upload the `wp-test-plugin` folder to the `/wp-content/plugins/` directory
+4. Activate the plugin through the 'Plugins' menu in WordPress
 
 ## Usage
 
@@ -42,9 +43,22 @@ wp-test-plugin/
 ├── js/
 │   └── wp-test-plugin.js     # Plugin scripts
 ├── languages/                 # Translation files directory
+├── vendor/                    # Composer dependencies (excluded from git)
+├── composer.json              # Composer configuration
+├── composer.lock              # Composer lock file
 ├── LICENSE                    # MIT License
 ├── README.md                  # This file
 └── wp-test-plugin.php        # Main plugin file
+```
+
+## Dependencies
+
+This plugin uses Composer to manage dependencies:
+- **urlund/wp-plugin-updater**: WordPress plugin updater with GitHub integration
+
+To install dependencies, run:
+```bash
+composer install
 ```
 
 ## Development
