@@ -15,14 +15,16 @@
         }
     ],
     "bin": [
-        "bin/plugin-json"
+        "bin/plugin-json",
+        "bin/plugin-zip"
     ],
     "scripts": {
-        "generate-json": "bin/plugin-json",
-        "plugin-json": "bin/plugin-json"
+        "plugin-json": "bin/plugin-json",
+        "plugin-zip": "bin/plugin-zip"
     },
     "scripts-descriptions": {
-        "plugin-json": "Generate plugin.json from plugin headers"
+        "plugin-json": "Generate plugin.json from plugin headers",
+        "plugin-zip": "Package plugin files into a ZIP archive"
     },
     "require": {
         "php": ">=7.4"

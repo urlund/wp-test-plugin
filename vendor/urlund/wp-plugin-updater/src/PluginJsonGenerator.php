@@ -69,13 +69,14 @@ class PluginJsonGenerator
     {
         $longopts = array(
             "plugin:",          // Required: Plugin file path
-            "output:",          // Optional: Output file path
+            "output:",          // Optional: Output file path or directory
             "slug:",            // Optional: Plugin slug
             "download-url:",    // Optional: Download URL
             "tested:",          // Optional: Tested up to WordPress version
             "requires-php:",    // Optional: Minimum PHP version
             "sections-dir:",    // Optional: Directory containing section files
             "config:",          // Optional: JSON config file
+            "version:",         // Optional: Version to append to filename
             "help",             // Show help
         );
 
@@ -325,7 +326,15 @@ class PluginJsonGenerator
      */
     private function writeJsonFile($metadata)
     {
-        $outputFile = $this->options['output'] ?? 'plugin.json';
+        $outputFile = $this->generateOutputFilename($metadata);
+        
+        // Ensure output directory exists
+        $outputDir = dirname($outputFile);
+        if (!is_dir($outputDir)) {
+            if (!mkdir($outputDir, 0755, true)) {
+                throw new Exception("Cannot create output directory: " . $outputDir);
+            }
+        }
         
         $json = json_encode($metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         if ($json === false) {
@@ -338,6 +347,68 @@ class PluginJsonGenerator
         }
 
         $this->info("Written " . strlen($json) . " bytes to " . $outputFile);
+    }
+
+    /**
+     * Generate output filename
+     */
+    private function generateOutputFilename($metadata)
+    {
+        if (isset($this->options['output'])) {
+            $outputPath = $this->options['output'];
+            
+            // If output path ends with .json, use it as complete file path
+            if (strtolower(substr($outputPath, -5)) === '.json') {
+                return $outputPath;
+            }
+            
+            // Otherwise, treat it as a directory and generate filename inside it
+            $filename = 'plugin';
+            $version = $this->options['version'] ?? '';
+            
+            if (!empty($version)) {
+                $filename .= '-' . $version;
+            }
+            $filename .= '.json';
+            
+            // Ensure directory path ends with separator
+            $outputPath = rtrim($outputPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            
+            return $outputPath . $filename;
+        }
+
+        // Default behavior when no output specified
+        $filename = 'plugin';
+        $version = $this->options['version'] ?? '';
+        
+        if (!empty($version)) {
+            $filename .= '-' . $version;
+        }
+        
+        return $filename . '.json';
+    }
+
+    /**
+     * Get plugin slug from metadata
+     */
+    private function getPluginSlug($metadata)
+    {
+        // Use provided slug, otherwise derive from plugin name
+        if (isset($this->options['slug'])) {
+            return $this->options['slug'];
+        }
+        
+        if (isset($metadata['slug'])) {
+            return $metadata['slug'];
+        }
+        
+        if (isset($metadata['name'])) {
+            return $this->sanitize_title($metadata['name']);
+        }
+        
+        // Fallback to plugin filename without extension
+        $pluginFile = basename($this->options['plugin'], '.php');
+        return $this->sanitize_title($pluginFile);
     }
 
     /**
@@ -364,7 +435,10 @@ class PluginJsonGenerator
         echo "Required Options:\n";
         echo "  --plugin=FILE          Path to the main plugin PHP file\n\n";
         echo "Optional Options:\n";
-        echo "  --output=FILE          Output file path (default: plugin.json)\n";
+        echo "  --output=PATH          Output file path or directory (default: plugin.json)\n";
+        echo "                         If ends with .json: complete file path\n";
+        echo "                         Otherwise: directory to place generated file\n";
+        echo "  --version=STRING       Version to append to filename (when using directory output)\n";
         echo "  --slug=STRING          Plugin slug (default: auto-detected)\n";
         echo "  --download-url=URL     Download URL for the plugin\n";
         echo "  --tested=VERSION       WordPress version tested up to\n";
@@ -394,6 +468,8 @@ class PluginJsonGenerator
         echo "Examples:\n";
         echo "  generate-plugin-json --plugin=my-plugin.php\n";
         echo "  generate-plugin-json --plugin=src/my-plugin.php --output=dist/plugin.json\n";
+        echo "  generate-plugin-json --plugin=my-plugin.php --output=dist --version=1.2.0\n";
+        echo "  generate-plugin-json --plugin=my-plugin.php --output=releases/ --version=1.0.0\n";
         echo "  generate-plugin-json --plugin=my-plugin.php --config=assets.json --tested=6.4\n";
     }
 

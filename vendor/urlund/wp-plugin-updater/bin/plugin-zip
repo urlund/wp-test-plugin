@@ -1,10 +1,9 @@
 #!/usr/bin/env php
 <?php
 /**
- * Plugin JSON Generator CLI
+ * Plugin ZIP Packager CLI
  * 
- * A Composer-integrated CLI tool to generate plugin.json metadata files
- * from WordPress plugin headers and additional configuration.
+ * A Composer-integrated CLI tool to package WordPress plugins into ZIP files.
  * 
  * @package Urlund\WpPluginUpdater
  * @author Henrik Urlund
@@ -31,18 +30,29 @@ if (!$autoloaderFound) {
     // The script will work standalone
 }
 
-use Urlund\WordPress\PluginUpdater\PluginJsonGenerator;
+use Urlund\WordPress\PluginUpdater\PluginZipPackager;
 
 // If the class is not autoloaded, load it inline
-if (!class_exists('Urlund\WordPress\PluginUpdater\PluginJsonGenerator')) {
-    require_once __DIR__ . '/../src/PluginJsonGenerator.php';
+if (!class_exists('Urlund\WordPress\PluginUpdater\PluginZipPackager')) {
+    require_once __DIR__ . '/../src/PluginZipPackager.php';
+}
+
+// Check if ZIP extension is available
+if (!extension_loaded('zip')) {
+    echo "\033[31m✗ Error: PHP ZIP extension is required but not installed.\033[0m\n";
+    echo "Please install the ZIP extension:\n";
+    echo "  - Ubuntu/Debian: sudo apt-get install php-zip\n";
+    echo "  - CentOS/RHEL: sudo yum install php-zip\n";
+    echo "  - macOS (Homebrew): brew install php && brew install php-zip\n";
+    echo "  - Windows: Enable extension=zip in php.ini\n";
+    exit(1);
 }
 
 // Run the CLI tool
 if (php_sapi_name() === 'cli') {
     try {
-        $generator = new PluginJsonGenerator();
-        $generator->run();
+        $packager = new PluginZipPackager();
+        $packager->run();
     } catch (Exception $e) {
         echo "\033[31m✗ Error: " . $e->getMessage() . "\033[0m\n";
         exit(1);

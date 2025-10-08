@@ -3,7 +3,7 @@
  * Plugin Name: WP Test Plugin
  * Plugin URI: https://github.com/urlund/wp-test-plugin
  * Description: A simple WordPress plugin boilerplate for testing and development
- * Version: 1.0.3
+ * Version: 1.0.5
  * Author: Henrik Urlund
  * Author URI: https://github.com/urlund
  * License: MIT
@@ -19,9 +19,8 @@ if ( ! defined( 'WPINC' ) ) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use Urlund\WordPress\PluginUpdater\GitHubPluginRepository;
-
-new GitHubPluginRepository('wp-test-plugin/wp-test-plugin.php', 'urlund/wp-test-plugin', array(
+// Initialize the GitHub updater
+Urlund\WordPress\PluginUpdater\GitHubRepository::getInstance('wp-test-plugin/wp-test-plugin.php', 'urlund/wp-test-plugin', array(
     // 'auth'           => 'your-github-token', // Optional: GitHub token for private repos or higher rate limits
     // 'slug'           => 'custom-slug',       // Optional: Custom plugin slug
     // 'prefer_json'    => true,                // Optional: Prefer JSON metadata over ZIP parsing (default: true)

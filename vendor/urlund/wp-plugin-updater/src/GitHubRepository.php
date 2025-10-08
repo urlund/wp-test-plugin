@@ -4,9 +4,9 @@ namespace Urlund\WordPress\PluginUpdater;
 
 /*
  * Class for a GitHub-based plugin repository.
- * Extends the AbstractPluginRepository to provide GitHub-specific implementations.
+ * Extends the AbstractRepository to provide GitHub-specific implementations.
  */
-class GitHubPluginRepository extends AbstractPluginRepository
+class GitHubRepository extends AbstractRepository
 {
     /**
      * GitHub personal access token.
@@ -73,7 +73,7 @@ class GitHubPluginRepository extends AbstractPluginRepository
      *     @type int    $max_file_size  Optional. Maximum ZIP file size in bytes. Default 52428800 (50MB).
      * }
      */
-    public function __construct($plugin, $repository, $config = array())
+    protected function __construct($plugin, $repository, $config = array())
     {
         $this->plugin     = $plugin;
         $this->repository = $repository;

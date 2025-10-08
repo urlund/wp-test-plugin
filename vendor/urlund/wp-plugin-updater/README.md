@@ -32,6 +32,23 @@ composer run plugin-json -- --plugin=path/to/plugin.php
 composer run generate-json -- --plugin=path/to/plugin.php --output=dist/plugin.json
 ```
 
+### CLI Tool: Plugin ZIP Packager
+
+Package your plugin files into a properly structured ZIP archive:
+
+#### Via Composer Scripts
+
+```bash
+# Simplest packaging (uses current directory name)
+composer run plugin-zip
+
+# Basic packaging with explicit name
+composer run plugin-zip -- --name=my-plugin
+
+# With version and custom output
+composer run plugin-zip -- --name=my-plugin --version=1.2.0 --output=releases/my-plugin-1.2.0.zip
+```
+
 #### Direct Binary Execution
 
 ```bash
@@ -62,7 +79,7 @@ composer run plugin-json -- \
   --requires-php=8.0
 ```
 
-### CLI Options
+### CLI Options (Plugin JSON Generator)
 
 | Option | Description | Example |
 |--------|-------------|---------|
@@ -75,6 +92,43 @@ composer run plugin-json -- \
 | `--sections-dir` | Directory with section files | `--sections-dir=docs` |
 | `--config` | JSON config for banners/icons | `--config=assets.json` |
 | `--help` | Show help message | `--help` |
+
+#### Plugin ZIP Packager Examples
+
+```bash
+# Simplest usage - uses current directory name as plugin name
+composer run plugin-zip
+
+# Basic ZIP packaging with explicit name
+composer run plugin-zip -- --name=my-plugin
+
+# With version and custom output location
+composer run plugin-zip -- --name=my-plugin --version=1.2.0 --output=releases/my-plugin-1.2.0.zip
+
+# Package from different source directory
+composer run plugin-zip -- --name=my-plugin --source=/path/to/plugin-source
+
+# Custom exclusions and inclusions (using current directory name)
+composer run plugin-zip -- --exclude="*.md,docs,tests" --include="important.txt"
+
+# Skip default exclusions (include everything)
+composer run plugin-zip -- --name=my-plugin --no-defaults
+```
+
+### CLI Options (Plugin ZIP Packager)
+
+| Option | Description | Example |
+|--------|-------------|---------|
+| `--name` | Plugin folder name inside ZIP (default: current directory name) | `--name=my-plugin` |
+| `--output` | Output ZIP filename | `--output=my-plugin-1.0.zip` |
+| `--source` | Source directory to package | `--source=/path/to/plugin` |
+| `--version` | Version to append to filename | `--version=1.2.0` |
+| `--include` | Additional files to include (comma-separated) | `--include="file1.txt,file2.md"` |
+| `--exclude` | Additional exclusion patterns (comma-separated) | `--exclude="*.log,temp"` |
+| `--no-defaults` | Don't use default exclusion patterns | `--no-defaults` |
+| `--help` | Show help message | `--help` |
+
+**Default Exclusions**: The plugin-zip tool automatically excludes development files like `.git`, `node_modules`, `vendor`, `composer.json`, IDE files, logs, and build artifacts. Use `--no-defaults` to include everything.
 
 ### Configuration File Format
 
@@ -130,12 +184,17 @@ jobs:
       - name: Install dependencies
         run: composer install --no-dev --optimize-autoloader
         
-      - name: Generate plugin.json
+      - name: Generate plugin.json and ZIP package
         run: |
           composer run plugin-json -- \
             --plugin=my-plugin.php \
             --download-url=https://github.com/${{ github.repository }}/releases/latest/download/plugin.zip \
             --tested=6.4
+            
+          composer run plugin-zip -- \
+            --name=my-plugin \
+            --version=${{ github.ref_name }} \
+            --output=my-plugin-${{ github.ref_name }}.zip
 ```
 
 #### Package.json Integration
@@ -146,7 +205,8 @@ If you also use npm/yarn in your project:
 {
   "scripts": {
     "build:metadata": "composer run plugin-json -- --plugin=my-plugin.php --config=assets.json",
-    "build": "npm run build:js && npm run build:metadata"
+    "build:package": "composer run plugin-zip -- --name=my-plugin --version=$(node -p \"require('./package.json').version\")",
+    "build": "npm run build:js && npm run build:metadata && npm run build:package"
   }
 }
 ```

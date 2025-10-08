@@ -9,12 +9,12 @@ class ComposerStaticInitfa13beb1209f6ef1485ed277820a52ec
     public static $prefixLengthsPsr4 = array (
         'U' => 
         array (
-            'Urlund\\WordPress\\PluginUpdater\\' => 31,
+            'Urlund\\WpPluginUpdater\\' => 23,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Urlund\\WordPress\\PluginUpdater\\' => 
+        'Urlund\\WpPluginUpdater\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
