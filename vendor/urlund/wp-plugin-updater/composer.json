@@ -1,0 +1,33 @@
+{
+    "name": "urlund/wp-plugin-updater",
+    "type": "library",
+    "description": "WordPress plugin updater with GitHub integration and CLI tools",
+    "version": "1.0.0",
+    "license": "GPLv2",
+    "autoload": {
+        "psr-4": {
+            "Urlund\\WordPress\\PluginUpdater\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Henrik Urlund"
+        }
+    ],
+    "bin": [
+        "bin/plugin-json"
+    ],
+    "scripts": {
+        "generate-json": "bin/plugin-json",
+        "plugin-json": "bin/plugin-json"
+    },
+    "scripts-descriptions": {
+        "plugin-json": "Generate plugin.json from plugin headers"
+    },
+    "require": {
+        "php": ">=7.4"
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}

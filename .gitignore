@@ -16,9 +16,6 @@ Thumbs.db
 node_modules/
 npm-debug.log*
 
-# Composer
-vendor/
-
 # Temporary files
 *.tmp
 *.bak

@@ -1,0 +1,11 @@
+{
+    "name": "WP Test Plugin",
+    "slug": "wp-test-plugin",
+    "version": "1.0.3",
+    "author": "Henrik Urlund",
+    "author_profile": "https://github.com/urlund",
+    "last_updated": "2025-10-08 11:05:37",
+    "sections": {
+        "description": "<h1>Some description</h1><br />\n<br />\nWooha!"
+    }
+}

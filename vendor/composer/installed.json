@@ -1,14 +1,9 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
-    ],
-    "content-hash": "14caba0e43e18b4d2280b969a0e1bf31",
     "packages": [
         {
             "name": "urlund/wp-plugin-updater",
             "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/urlund/wp-plugin-updater.git",
@@ -23,11 +18,13 @@
             "require": {
                 "php": ">=7.4"
             },
+            "time": "2025-10-08T12:09:08+00:00",
             "default-branch": true,
             "bin": [
                 "bin/plugin-json"
             ],
             "type": "library",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "Urlund\\WordPress\\PluginUpdater\\": "src/"
@@ -54,23 +51,9 @@
                 "source": "https://github.com/urlund/wp-plugin-updater/tree/main",
                 "issues": "https://github.com/urlund/wp-plugin-updater/issues"
             },
-            "time": "2025-10-08T12:09:08+00:00"
+            "install-path": "../urlund/wp-plugin-updater"
         }
     ],
-    "packages-dev": [],
-    "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": {
-        "urlund/wp-plugin-updater": 20
-    },
-    "prefer-stable": false,
-    "prefer-lowest": false,
-    "platform": {
-        "php": ">=7.4"
-    },
-    "platform-dev": {},
-    "platform-overrides": {
-        "php": "7.4"
-    },
-    "plugin-api-version": "2.6.0"
+    "dev": true,
+    "dev-package-names": []
 }

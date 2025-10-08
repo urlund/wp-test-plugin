@@ -3,7 +3,7 @@
  * Plugin Name: WP Test Plugin
  * Plugin URI: https://github.com/urlund/wp-test-plugin
  * Description: A simple WordPress plugin boilerplate for testing and development
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: Henrik Urlund
  * Author URI: https://github.com/urlund
  * License: MIT
@@ -16,6 +16,19 @@
 if ( ! defined( 'WPINC' ) ) {
     die;
 }
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+use Urlund\WordPress\PluginUpdater\GitHubPluginRepository;
+
+new GitHubPluginRepository('wp-test-plugin/wp-test-plugin.php', 'urlund/wp-test-plugin', array(
+    // 'auth'           => 'your-github-token', // Optional: GitHub token for private repos or higher rate limits
+    // 'slug'           => 'custom-slug',       // Optional: Custom plugin slug
+    // 'prefer_json'    => true,                // Optional: Prefer JSON metadata over ZIP parsing (default: true)
+    // 'cache_duration' => 21600,               // Optional: Cache duration in seconds (default: 6 hours)
+    // 'timeout'        => 30,                  // Optional: HTTP request timeout (default: 30 seconds)
+    // 'max_file_size'  => 52428800,            // Optional: Maximum ZIP file size in bytes (default: 50MB)
+));
 
 /**
  * Currently plugin version.
@@ -94,3 +107,4 @@ function wp_test_plugin_enqueue_scripts() {
     );
 }
 add_action( 'wp_enqueue_scripts', 'wp_test_plugin_enqueue_scripts' );
+

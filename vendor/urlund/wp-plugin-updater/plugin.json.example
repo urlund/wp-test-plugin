@@ -1,0 +1,29 @@
+{
+    "name": "My Awesome Plugin",
+    "slug": "my-awesome-plugin",
+    "version": "1.2.3",
+    "tested": "6.4",
+    "requires": "5.0",
+    "requires_php": "7.4",
+    "author": "Your Name",
+    "author_profile": "https://yourwebsite.com",
+    "last_updated": "2024-10-08 12:00:00",
+    "download_link": "https://github.com/user/repo/releases/download/v1.2.3/plugin.zip",
+    "trunk": "",
+    "sections": {
+        "description": "This is an awesome WordPress plugin that does amazing things for your website. It provides powerful features with an intuitive interface.",
+        "installation": "1. Upload the plugin files to `/wp-content/plugins/my-awesome-plugin/`\n2. Activate the plugin through the 'Plugins' screen in WordPress\n3. Use the Settings->Plugin Name screen to configure the plugin",
+        "faq": "**Q: How do I configure this plugin?**\nA: Go to Settings > Plugin Name in your WordPress admin.\n\n**Q: Is this plugin compatible with my theme?**\nA: Yes, this plugin is designed to work with any properly coded WordPress theme.",
+        "changelog": "= 1.2.3 =\n* Fixed: Critical security vulnerability\n* Added: New dashboard widget\n* Improved: Performance optimizations\n\n= 1.2.2 =\n* Fixed: Compatibility with WordPress 6.4\n* Updated: Translation files\n\n= 1.2.1 =\n* Fixed: Minor bug fixes\n* Added: Support for custom post types",
+        "other_notes": "Special thanks to all contributors and beta testers who made this release possible."
+    },
+    "banners": {
+        "low": "https://github.com/user/repo/raw/main/assets/banner-772x250.jpg",
+        "high": "https://github.com/user/repo/raw/main/assets/banner-1544x500.jpg"
+    },
+    "icons": {
+        "1x": "https://github.com/user/repo/raw/main/assets/icon-128x128.png",
+        "2x": "https://github.com/user/repo/raw/main/assets/icon-256x256.png"
+    },
+    "upgrade_notice": "Important security update. Please update immediately."
+}
