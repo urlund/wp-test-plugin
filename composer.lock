@@ -1,0 +1,72 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "14caba0e43e18b4d2280b969a0e1bf31",
+    "packages": [
+        {
+            "name": "urlund/wp-plugin-updater",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:urlund/wp-plugin-updater.git",
+                "reference": "69c15d82818b2e64ae276df0dd194cea22cd4982"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/urlund/wp-plugin-updater/zipball/69c15d82818b2e64ae276df0dd194cea22cd4982",
+                "reference": "69c15d82818b2e64ae276df0dd194cea22cd4982",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.4"
+            },
+            "default-branch": true,
+            "bin": [
+                "bin/plugin-json"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Urlund\\WpPluginUpdater\\": "src/"
+                }
+            },
+            "scripts": {
+                "generate-json": [
+                    "bin/plugin-json"
+                ],
+                "plugin-json": [
+                    "bin/plugin-json"
+                ]
+            },
+            "license": [
+                "GPLv2"
+            ],
+            "authors": [
+                {
+                    "name": "Henrik Urlund"
+                }
+            ],
+            "description": "WordPress plugin updater with GitHub integration and CLI tools",
+            "time": "2025-10-08T10:49:41+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "urlund/wp-plugin-updater": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.4"
+    },
+    "platform-dev": {},
+    "platform-overrides": {
+        "php": "7.4"
+    },
+    "plugin-api-version": "2.6.0"
+}
