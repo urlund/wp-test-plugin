@@ -50,7 +50,8 @@ class PluginZipPackager
         'node_modules',
         '.github',
         'vendor/bin',
-        'vendor/**/bin',
+        'vendor/*/bin',
+        'vendor/*/*/bin',
         
         // IDE files
         '.vscode',
@@ -308,6 +309,11 @@ class PluginZipPackager
      */
     private function shouldExcludeFile($relativePath, $exclusions)
     {
+        // Special handling for bin directories in vendor
+        if (preg_match('#^vendor/.*/bin(/.*)?$#', $relativePath)) {
+            return true;
+        }
+        
         foreach ($exclusions as $pattern) {
             // Direct name match
             if (basename($relativePath) === $pattern) {

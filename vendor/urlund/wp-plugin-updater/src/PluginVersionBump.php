@@ -48,7 +48,7 @@ class PluginVersionBump
 
     private function parseCliOptions()
     {
-        $opts = getopt('', ['plugin:', 'composer::', 'help']);
+        $opts = getopt('', ['plugin:', 'composer::', 'push', 'help']);
         global $argv;
         $args = array_slice($argv, 1);
         $bump = null;
@@ -197,7 +197,19 @@ class PluginVersionBump
         exec($cmd, $out, $code);
         if ($code === 0) {
             $this->success("Git tag $tag created");
-            $this->info("To push the tag to origin: git push origin $tag");
+            
+            // Push the tag if --push flag is provided
+            if (isset($this->options['push'])) {
+                $pushCmd = "git push origin $tag";
+                exec($pushCmd, $pushOut, $pushCode);
+                if ($pushCode === 0) {
+                    $this->success("Git tag $tag pushed to origin");
+                } else {
+                    $this->error("Failed to push git tag $tag to origin");
+                }
+            } else {
+                $this->info("To push the tag to origin: git push origin $tag");
+            }
         } else {
             $this->error("Failed to create git tag $tag (maybe it already exists?)");
         }
@@ -242,10 +254,11 @@ class PluginVersionBump
         echo "  php src/PluginVersionBump.php --plugin=plugin.php major\n";
         echo "  php src/PluginVersionBump.php --plugin=plugin.php 1.2.3\n";
         echo "  php src/PluginVersionBump.php --composer=composer.json patch\n";
-        echo "  php src/PluginVersionBump.php --plugin=plugin.php --composer=composer.json patch\n";
+        echo "  php src/PluginVersionBump.php --plugin=plugin.php --composer=composer.json patch --push\n";
         echo "\nOptions:\n";
         echo "  --plugin=FILE      Path to plugin file (plugin.php or plugin.json)\n";
         echo "  --composer=FILE    Path to composer.json (default: composer.json)\n";
+        echo "  --push             Push git tag to origin after creating it\n";
         echo "  patch|minor|major  Bump type, or explicit version (e.g., 1.2.3)\n";
         echo "  --help             Show this help\n";
     }
