@@ -24,17 +24,21 @@ class PluginVersionBump
 
     public function run()
     {
-        $newVersion = null;
-        if (isset($this->options['plugin'])) {
-            $newVersion = $this->bumpPluginFile($this->options['plugin'], $this->bumpType);
-        }
-        // If --composer is not provided, look for composer.json in cwd
         $composerFile = $this->options['composer'] ?? null;
         if (!$composerFile && file_exists('composer.json')) {
             $composerFile = 'composer.json';
         }
+        $newVersion = null;
         if ($composerFile) {
-            $this->bumpComposerJson($composerFile, $this->bumpType);
+            $newVersion = $this->bumpComposerJson($composerFile, $this->bumpType);
+        }
+        // Always align plugin file version to composer.json version if both are present
+        if (isset($this->options['plugin'])) {
+            if ($newVersion) {
+                $this->setPluginFileVersion($this->options['plugin'], $newVersion);
+            } else {
+                $newVersion = $this->bumpPluginFile($this->options['plugin'], $this->bumpType);
+            }
         }
         // If plugin file is git managed, create a tag for the new version
         if ($newVersion && $this->isGitManaged($this->options['plugin'])) {
@@ -86,6 +90,40 @@ class PluginVersionBump
         $data['version'] = $newVersion;
         file_put_contents($composerFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
         $this->success("composer.json version updated: $oldVersion → $newVersion");
+        return $newVersion;
+    }
+
+    private function setPluginFileVersion($pluginFile, $version)
+    {
+        $ext = strtolower(pathinfo($pluginFile, PATHINFO_EXTENSION));
+        if ($ext === 'json') {
+            $data = json_decode(file_get_contents($pluginFile), true);
+            $oldVersion = $data['version'] ?? null;
+            $data['version'] = $version;
+            file_put_contents($pluginFile, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
+            $this->success("$pluginFile version aligned to composer.json: $oldVersion → $version");
+        } elseif ($ext === 'php') {
+            $lines = file($pluginFile);
+            $found = false;
+            $oldVersion = null;
+            foreach ($lines as $i => $line) {
+                if (preg_match('/^(\s*\*?\s*Version:\s*)(.+)$/i', $line, $m)) {
+                    $oldVersion = trim($m[2]);
+                    // Replace the line with the prefix + new version
+                    $lines[$i] = $m[1] . $version . "\n";
+                    $found = true;
+                    break;
+                }
+            }
+            if ($found) {
+                file_put_contents($pluginFile, implode('', $lines));
+                $this->success("$pluginFile version aligned to composer.json: $oldVersion → $version");
+            } else {
+                $this->error("No Version: header found in $pluginFile");
+            }
+        } else {
+            $this->error("Unsupported plugin file type: $pluginFile");
+        }
     }
 
     private function bumpPluginFile($pluginFile, $bumpType)
