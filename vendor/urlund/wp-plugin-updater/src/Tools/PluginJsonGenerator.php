@@ -9,7 +9,7 @@
  * @version 1.0.0
  */
 
-namespace Urlund\WordPress\PluginUpdater;
+namespace Urlund\WordPress\PluginUpdater\Tools;
 
 use Exception;
 

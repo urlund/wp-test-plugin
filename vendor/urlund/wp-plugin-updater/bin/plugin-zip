@@ -30,11 +30,11 @@ if (!$autoloaderFound) {
     // The script will work standalone
 }
 
-use Urlund\WordPress\PluginUpdater\PluginZipPackager;
+use Urlund\WordPress\PluginUpdater\Tools\PluginZipPackager;
 
 // If the class is not autoloaded, load it inline
-if (!class_exists('Urlund\WordPress\PluginUpdater\PluginZipPackager')) {
-    require_once __DIR__ . '/../src/PluginZipPackager.php';
+if (!class_exists('Urlund\WordPress\PluginUpdater\Tools\PluginZipPackager')) {
+    require_once __DIR__ . '/../src/Tools/PluginZipPackager.php';
 }
 
 // Check if ZIP extension is available

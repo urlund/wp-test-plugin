@@ -31,11 +31,11 @@ if (!$autoloaderFound) {
     // The script will work standalone
 }
 
-use Urlund\WordPress\PluginUpdater\PluginGitHubPublisher;
+use Urlund\WordPress\PluginUpdater\Tools\PluginGitHubPublisher;
 
 // If the class is not autoloaded, load it inline
-if (!class_exists('Urlund\WordPress\PluginUpdater\PluginGitHubPublisher')) {
-    require_once __DIR__ . '/../src/PluginGitHubPublisher.php';
+if (!class_exists('Urlund\WordPress\PluginUpdater\Tools\PluginGitHubPublisher')) {
+    require_once __DIR__ . '/../src/Tools/PluginGitHubPublisher.php';
 }
 
 // Run the CLI tool

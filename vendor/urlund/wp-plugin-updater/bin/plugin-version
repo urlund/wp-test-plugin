@@ -31,11 +31,11 @@ if (!$autoloaderFound) {
     // The script will work standalone
 }
 
-use Urlund\WordPress\PluginUpdater\PluginVersionBump;
+use Urlund\WordPress\PluginUpdater\Tools\PluginVersionBump;
 
 // If the class is not autoloaded, load it inline
-if (!class_exists('Urlund\WordPress\PluginUpdater\PluginVersionBump')) {
-    require_once __DIR__ . '/../src/PluginVersionBump.php';
+if (!class_exists('Urlund\WordPress\PluginUpdater\Tools\PluginVersionBump')) {
+    require_once __DIR__ . '/../src/Tools/PluginVersionBump.php';
 }
 
 // Run the CLI tool

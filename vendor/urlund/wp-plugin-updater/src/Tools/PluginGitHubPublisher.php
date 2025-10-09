@@ -5,7 +5,7 @@
  * Publishes a plugin ZIP as a release asset to a draft GitHub release matching the version in plugin.json.
  */
 
-namespace Urlund\WordPress\PluginUpdater;
+namespace Urlund\WordPress\PluginUpdater\Tools;
 
 class PluginGitHubPublisher
 {

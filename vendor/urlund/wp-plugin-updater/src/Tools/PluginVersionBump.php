@@ -10,7 +10,7 @@
  *   php src/PluginVersionBump.php --plugin=plugin.php --composer=composer.json patch
  */
 
-namespace Urlund\WordPress\PluginUpdater;
+namespace Urlund\WordPress\PluginUpdater\Tools;
 
 class PluginVersionBump
 {
