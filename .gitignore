@@ -21,3 +21,8 @@ npm-debug.log*
 *.bak
 *.swp
 *~
+
+# Build/Distribution
+dist/
+build/
+.bundle/
