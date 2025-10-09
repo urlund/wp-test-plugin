@@ -42,6 +42,7 @@ class PluginVersionBump
         }
         // If plugin file is git managed, create a tag for the new version
         if ($newVersion && $this->isGitManaged($this->options['plugin'])) {
+            $this->commitVersionChanges($newVersion);
             $this->createGitTag($newVersion);
         }
     }
@@ -187,6 +188,45 @@ class PluginVersionBump
             $dir = $parent;
         }
         return false;
+    }
+
+    // Commit version changes to git
+    private function commitVersionChanges($version)
+    {
+        $files = [];
+        
+        // Add plugin file to commit
+        if (isset($this->options['plugin'])) {
+            $files[] = $this->options['plugin'];
+        }
+        
+        // Add composer.json if it was updated
+        $composerFile = $this->options['composer'] ?? null;
+        if (!$composerFile && file_exists('composer.json')) {
+            $composerFile = 'composer.json';
+        }
+        if ($composerFile) {
+            $files[] = $composerFile;
+        }
+        
+        if (!empty($files)) {
+            $addCmd = "git add " . implode(' ', array_map('escapeshellarg', $files));
+            exec($addCmd, $out, $code);
+            
+            if ($code === 0) {
+                $commitMsg = "Bump version to $version";
+                $commitCmd = "git commit -m " . escapeshellarg($commitMsg);
+                exec($commitCmd, $commitOut, $commitCode);
+                
+                if ($commitCode === 0) {
+                    $this->success("Version changes committed: $commitMsg");
+                } else {
+                    $this->error("Failed to commit version changes");
+                }
+            } else {
+                $this->error("Failed to add files to git");
+            }
+        }
     }
 
     // Create a git tag for the new version

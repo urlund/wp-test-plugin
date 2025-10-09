@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9897839efbecceed2f88749c35f085f9",
+    "content-hash": "030209701d99eeb809c3ef171653cb49",
     "packages": [
         {
             "name": "urlund/wp-plugin-updater",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/urlund/wp-plugin-updater.git",
-                "reference": "383007b3ed6dcd9ed56776832faedc6666dd1fb6"
+                "reference": "cc74f1971ae11b90788bef622aa47a0f3e9277bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/urlund/wp-plugin-updater/zipball/383007b3ed6dcd9ed56776832faedc6666dd1fb6",
-                "reference": "383007b3ed6dcd9ed56776832faedc6666dd1fb6",
+                "url": "https://api.github.com/repos/urlund/wp-plugin-updater/zipball/cc74f1971ae11b90788bef622aa47a0f3e9277bf",
+                "reference": "cc74f1971ae11b90788bef622aa47a0f3e9277bf",
                 "shasum": ""
             },
             "require": {
@@ -63,7 +63,7 @@
                 "source": "https://github.com/urlund/wp-plugin-updater/tree/main",
                 "issues": "https://github.com/urlund/wp-plugin-updater/issues"
             },
-            "time": "2025-10-09T08:36:57+00:00"
+            "time": "2025-10-09T08:39:56+00:00"
         }
     ],
     "packages-dev": [],
