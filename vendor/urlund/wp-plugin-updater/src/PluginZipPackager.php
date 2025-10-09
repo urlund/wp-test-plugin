@@ -49,6 +49,8 @@ class PluginZipPackager
         // Development directories
         'node_modules',
         '.github',
+        'vendor/bin',
+        'vendor/**/bin',
         
         // IDE files
         '.vscode',
