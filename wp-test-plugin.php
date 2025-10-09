@@ -4,7 +4,7 @@
  * Plugin Name: WP Test Plugin
  * Plugin URI: https://github.com/urlund/wp-test-plugin
  * Description: A simple WordPress plugin boilerplate for testing and development
- * Version: 1.0.23
+ * Version: 1.0.24
  * Author: Henrik Urlund
  * Author URI: https://github.com/urlund
  * License: MIT
@@ -31,7 +31,7 @@ Urlund\WordPress\PluginUpdater\GitHubRepository::getInstance('wp-test-plugin/wp-
 ));
 
 $plugin_data = get_file_data(__FILE__, array(
-    'Version'     => 'Version',
+    'Version' => 'Version',
 ));
 
 /**
