@@ -1,36 +1,36 @@
 {
-	"name": "urlund/wp-test-plugin",
-	"description": "A simple WordPress plugin boilerplate for testing and development",
-	"version": "1.0.9",
-	"type": "wordpress-plugin",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Henrik Urlund",
-			"email": "henrik@urlund.dk"
-		}
-	],
-	"require": {
-		"php": ">=7.4",
-		"urlund/wp-plugin-updater": "dev-main"
-	},
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/urlund/wp-plugin-updater.git"
-		}
-	],
-	"autoload": {
-		"psr-4": {
-			"Urlund\\WPTestPlugin\\": "src/"
-		}
-	},
-	"config": {
-		"platform": {
-			"php": "7.4"
-		},
-		"allow-plugins": {
-			"composer/installers": true
-		}
-	}
+    "name": "urlund/wp-test-plugin",
+    "description": "A simple WordPress plugin boilerplate for testing and development",
+    "version": "1.0.12",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Henrik Urlund",
+            "email": "henrik@urlund.dk"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "urlund/wp-plugin-updater": "dev-main"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/urlund/wp-plugin-updater.git"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Urlund\\WPTestPlugin\\": "src/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        },
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
 }

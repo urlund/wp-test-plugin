@@ -113,10 +113,11 @@ class PluginVersionBump
             $oldVersion = null;
             $newVersion = null;
             foreach ($lines as $i => $line) {
-                if (preg_match('/^\s*\*?\s*Version:\s*(\d+\.\d+\.\d+)/i', $line, $m)) {
+                if (preg_match('/^\s*\*?\s*Version:\s*([0-9]+\.[0-9]+\.[0-9]+)/i', $line, $m)) {
                     $oldVersion = $m[1];
                     $newVersion = $this->getBumpedVersion($oldVersion, $bumpType);
-                    $lines[$i] = preg_replace('/(Version:\s*)\d+\.\d+\.\d+/', '$1' . $newVersion, $line);
+                    // Replace the full version number after 'Version:'
+                    $lines[$i] = preg_replace('/(Version:\s*)([0-9]+\.[0-9]+\.[0-9]+)/i', '$1' . $newVersion, $line);
                     $found = true;
                     break;
                 }

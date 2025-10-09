@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'urlund/wp-test-plugin',
-        'pretty_version' => '1.0.9',
-        'version' => '1.0.9.0',
+        'pretty_version' => '1.0.12',
+        'version' => '1.0.12.0',
         'reference' => null,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -13,7 +13,7 @@
         'urlund/wp-plugin-updater' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'f543166af7165aaded7b30f80daabb8c48c58a65',
+            'reference' => '154fc50b68c5dd606e76d158b0d1d3dd935c70e6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../urlund/wp-plugin-updater',
             'aliases' => array(
@@ -22,8 +22,8 @@
             'dev_requirement' => false,
         ),
         'urlund/wp-test-plugin' => array(
-            'pretty_version' => '1.0.9',
-            'version' => '1.0.9.0',
+            'pretty_version' => '1.0.12',
+            'version' => '1.0.12.0',
             'reference' => null,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
