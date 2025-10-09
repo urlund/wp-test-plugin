@@ -489,11 +489,7 @@ class GitHubRepository extends AbstractRepository
                 );
 
                 if (is_wp_error($response) || !isset($response['response']['code']) || $response['response']['code'] != 200) {
-                    $this->log_error('Failed to fetch plugin.json from GitHub', array(
-                        'asset_url' => $asset['browser_download_url'],
-                        'response_code' => isset($response['response']['code']) ? $response['response']['code'] : 'unknown',
-                        'error' => is_wp_error($response) ? $response->get_error_message() : 'HTTP error'
-                    ));
+                    $this->handle_api_error($response, 'fetching plugin.json asset');
                     continue;
                 }
 

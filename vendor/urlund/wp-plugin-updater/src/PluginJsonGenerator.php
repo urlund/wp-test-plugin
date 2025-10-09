@@ -77,6 +77,7 @@ class PluginJsonGenerator
             "sections-dir:",    // Optional: Directory containing section files
             "config:",          // Optional: JSON config file
             "version:",         // Optional: Version to append to filename
+            "zip:",             // Optional: Path to plugin zip file for sha512
             "help",             // Show help
         );
 
@@ -135,6 +136,11 @@ class PluginJsonGenerator
             'icons' => $config['icons'] ?? $this->defaults['icons'],
             'upgrade_notice' => $config['upgrade_notice'] ?? $this->defaults['upgrade_notice']
         );
+
+        // If --zip is provided, calculate sha512 and add to metadata
+        if (isset($this->options['zip']) && is_string($this->options['zip']) && file_exists($this->options['zip'])) {
+            $metadata['sha512'] = hash_file('sha512', $this->options['zip']);
+        }
 
         // Remove empty values to keep JSON clean
         $metadata = $this->removeEmptyValues($metadata);
@@ -438,7 +444,8 @@ class PluginJsonGenerator
         echo "  --output=PATH          Output file path or directory (default: plugin.json)\n";
         echo "                         If ends with .json: complete file path\n";
         echo "                         Otherwise: directory to place generated file\n";
-        echo "  --version=STRING       Version to append to filename (when using directory output)\n";
+    echo "  --version=STRING       Version to append to filename (when using directory output)\n";
+    echo "  --zip=FILE             Path to plugin zip file; will include sha512 hash in output\n";
         echo "  --slug=STRING          Plugin slug (default: auto-detected)\n";
         echo "  --download-url=URL     Download URL for the plugin\n";
         echo "  --tested=VERSION       WordPress version tested up to\n";

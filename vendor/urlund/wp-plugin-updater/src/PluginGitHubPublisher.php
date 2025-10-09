@@ -1,0 +1,162 @@
+<?php
+/**
+ * GitHub Release Publisher
+ *
+ * Publishes a plugin ZIP as a release asset to a draft GitHub release matching the version in plugin.json.
+ */
+
+namespace Urlund\WordPress\PluginUpdater;
+
+class PluginGitHubPublisher
+{
+    private $options = [];
+
+    public function __construct()
+    {
+        $this->parseCliOptions();
+    }
+
+    public function run()
+    {
+        try {
+            $this->validateOptions();
+            $jsonData = json_decode(file_get_contents($this->options['json']), true);
+            $version = $jsonData['version'] ?? null;
+            if (!$version) {
+                throw new \Exception("No version found in plugin.json");
+            }
+            $tag = 'v' . $version;
+            // If plugin.json contains sha512, validate it
+            if (!empty($jsonData['sha512'])) {
+                $actualSha = hash_file('sha512', $this->options['zip']);
+                if (strtolower($jsonData['sha512']) !== strtolower($actualSha)) {
+                    throw new \Exception("SHA-512 mismatch: plugin.json has {$jsonData['sha512']}, but zip file is $actualSha");
+                }
+                $this->info("SHA-512 validated for zip file");
+            }
+            $release = $this->findDraftRelease($version);
+            if (!$release) {
+                $this->error("No draft release found for tag $tag");
+                exit(1);
+            }
+            $this->info("Found draft release for tag $tag (ID: {$release['id']})");
+            $this->uploadAsset($release['id'], $this->options['zip']);
+            $this->success("Uploaded asset to release $tag");
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+            exit(1);
+        }
+    }
+
+    private function parseCliOptions()
+    {
+        $longopts = [
+            'repo:',   // owner/repo
+            'zip:',    // path to zip file
+            'json:',   // path to plugin.json
+            'token::', // optional, else use env
+            'help',
+        ];
+        $opts = getopt('h', $longopts);
+        if (isset($opts['h']) || isset($opts['help'])) {
+            $this->showHelp();
+            exit(0);
+        }
+        $this->options = $opts;
+    }
+
+    private function validateOptions()
+    {
+        foreach ([ 'repo', 'zip', 'json' ] as $key) {
+            if (empty($this->options[$key])) {
+                throw new \Exception("--$key is required");
+            }
+        }
+        if (!file_exists($this->options['zip'])) {
+            throw new \Exception("ZIP file not found: {$this->options['zip']}");
+        }
+        if (!file_exists($this->options['json'])) {
+            throw new \Exception("plugin.json not found: {$this->options['json']}");
+        }
+        if (empty($this->options['token']) && getenv('GITHUB_TOKEN') === false) {
+            throw new \Exception("GitHub token required via --token or GITHUB_TOKEN env var");
+        }
+    }
+
+    private function getToken()
+    {
+        return $this->options['token'] ?? getenv('GITHUB_TOKEN');
+    }
+
+    private function getVersionFromJson($jsonFile)
+    {
+        $data = json_decode(file_get_contents($jsonFile), true);
+        if (empty($data['version'])) {
+            throw new \Exception("No version found in $jsonFile");
+        }
+        return $data['version'];
+    }
+
+    private function findDraftRelease($version)
+    {
+        $url = "https://api.github.com/repos/{$this->options['repo']}/releases";
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'GitHubReleasePublisher');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: token ' . $this->getToken(),
+            'Accept: application/vnd.github+json',
+        ]);
+        $result = curl_exec($ch);
+        if ($result === false) {
+            throw new \Exception("Failed to fetch releases: " . curl_error($ch));
+        }
+        $releases = json_decode($result, true);
+        foreach ($releases as $release) {
+            if (($release['tag_name'] === $version || $release['name'] === 'v' . $version) && $release['draft']) {
+                return $release;
+            }
+        }
+        return null;
+    }
+
+    private function uploadAsset($releaseId, $zipPath)
+    {
+        $repo = $this->options['repo'];
+        $url = "https://uploads.github.com/repos/$repo/releases/$releaseId/assets?name=" . urlencode(basename($zipPath));
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'GitHubReleasePublisher');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: token ' . $this->getToken(),
+            'Content-Type: application/zip',
+            'Accept: application/vnd.github+json',
+        ]);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents($zipPath));
+        $result = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        if ($httpCode >= 300) {
+            $msg = "Failed to upload asset: HTTP $httpCode\n" . $result;
+            throw new \Exception($msg);
+        }
+    }
+
+    private function showHelp()
+    {
+        echo "GitHub Release Publisher\n";
+        echo "========================\n\n";
+        echo "Usage:\n";
+        echo "  php src/GitHubReleasePublisher.php --repo=owner/repo --zip=dist/plugin.zip --json=dist/plugin.json [--token=ghp_xxx]\n\n";
+        echo "Options:\n";
+        echo "  --repo=owner/repo   GitHub repository (required)\n";
+        echo "  --zip=FILE         Path to plugin ZIP file (required)\n";
+        echo "  --json=FILE        Path to plugin.json (required, for version)\n";
+        echo "  --token=TOKEN      GitHub token (optional, else use GITHUB_TOKEN env)\n";
+        echo "  --help             Show this help\n";
+    }
+
+    private function info($msg)    { echo "\033[34mℹ $msg\033[0m\n"; }
+    private function success($msg) { echo "\033[32m✓ $msg\033[0m\n"; }
+    private function error($msg)   { echo "\033[31m✗ $msg\033[0m\n"; }
+}

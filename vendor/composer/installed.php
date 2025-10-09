@@ -13,7 +13,7 @@
         'urlund/wp-plugin-updater' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '0e817e802f36fe455999f1921c9cbe45ffab888e',
+            'reference' => 'd5f577c400e4474ca610f85d1c0bdb7358d07e95',
             'type' => 'library',
             'install_path' => __DIR__ . '/../urlund/wp-plugin-updater',
             'aliases' => array(

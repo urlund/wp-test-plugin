@@ -1,0 +1,53 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Plugin JSON Generator CLI
+ * 
+ * A Composer-integrated CLI tool to generate plugin.json metadata files
+ * from WordPress plugin headers and additional configuration.
+ * 
+ * @package Urlund\WpPluginUpdater
+ * @author Henrik Urlund
+ * @version 1.0.0
+ */
+
+// Try to find the autoloader
+$autoloaderPaths = [
+    __DIR__ . '/../vendor/autoload.php',  // When installed as dependency
+    __DIR__ . '/../../../autoload.php',  // When this package is a dependency
+];
+
+$autoloaderFound = false;
+foreach ($autoloaderPaths as $path) {
+    if (file_exists($path)) {
+        require_once $path;
+        $autoloaderFound = true;
+        break;
+    }
+}
+
+if (!$autoloaderFound) {
+    // Fallback - no autoloader needed for this simple script
+    // The script will work standalone
+}
+
+use Urlund\WordPress\PluginUpdater\PluginGitHubPublisher;
+
+// If the class is not autoloaded, load it inline
+if (!class_exists('Urlund\WordPress\PluginUpdater\PluginGitHubPublisher')) {
+    require_once __DIR__ . '/../src/PluginGitHubPublisher.php';
+}
+
+// Run the CLI tool
+if (php_sapi_name() === 'cli') {
+    try {
+        $publisher = new PluginGitHubPublisher();
+        $publisher->run();
+    } catch (Exception $e) {
+        echo "\033[31m✗ Error: " . $e->getMessage() . "\033[0m\n";
+        exit(1);
+    }
+} else {
+    echo "This script must be run from the command line.\n";
+    exit(1);
+}

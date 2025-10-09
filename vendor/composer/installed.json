@@ -7,22 +7,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/urlund/wp-plugin-updater.git",
-                "reference": "0e817e802f36fe455999f1921c9cbe45ffab888e"
+                "reference": "d5f577c400e4474ca610f85d1c0bdb7358d07e95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/urlund/wp-plugin-updater/zipball/0e817e802f36fe455999f1921c9cbe45ffab888e",
-                "reference": "0e817e802f36fe455999f1921c9cbe45ffab888e",
+                "url": "https://api.github.com/repos/urlund/wp-plugin-updater/zipball/d5f577c400e4474ca610f85d1c0bdb7358d07e95",
+                "reference": "d5f577c400e4474ca610f85d1c0bdb7358d07e95",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4"
             },
-            "time": "2025-10-08T13:43:17+00:00",
+            "time": "2025-10-09T07:11:24+00:00",
             "default-branch": true,
             "bin": [
                 "bin/plugin-json",
-                "bin/plugin-zip"
+                "bin/plugin-zip",
+                "bin/plugin-publish"
             ],
             "type": "library",
             "installation-source": "dist",
@@ -37,6 +38,9 @@
                 ],
                 "plugin-zip": [
                     "bin/plugin-zip"
+                ],
+                "plugin-publish": [
+                    "bin/plugin-publish"
                 ]
             },
             "license": [
