@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd7fedff729dadf0eed940679ff47361",
+    "content-hash": "6b30c9e439dcb0399e2708d3421f8a14",
     "packages": [
         {
             "name": "urlund/wp-plugin-updater",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/urlund/wp-plugin-updater.git",
-                "reference": "a35f5da4ed8480fc52c12a29f784afb9557da9eb"
+                "reference": "f543166af7165aaded7b30f80daabb8c48c58a65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/urlund/wp-plugin-updater/zipball/a35f5da4ed8480fc52c12a29f784afb9557da9eb",
-                "reference": "a35f5da4ed8480fc52c12a29f784afb9557da9eb",
+                "url": "https://api.github.com/repos/urlund/wp-plugin-updater/zipball/f543166af7165aaded7b30f80daabb8c48c58a65",
+                "reference": "f543166af7165aaded7b30f80daabb8c48c58a65",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,8 @@
             "bin": [
                 "bin/plugin-json",
                 "bin/plugin-zip",
-                "bin/plugin-publish"
+                "bin/plugin-publish",
+                "bin/plugin-version"
             ],
             "type": "library",
             "autoload": {
@@ -44,6 +45,9 @@
                 ],
                 "plugin-publish": [
                     "bin/plugin-publish"
+                ],
+                "plugin-version": [
+                    "bin/plugin-version"
                 ]
             },
             "license": [
@@ -59,7 +63,7 @@
                 "source": "https://github.com/urlund/wp-plugin-updater/tree/main",
                 "issues": "https://github.com/urlund/wp-plugin-updater/issues"
             },
-            "time": "2025-10-09T07:28:23+00:00"
+            "time": "2025-10-09T07:49:00+00:00"
         }
     ],
     "packages-dev": [],
