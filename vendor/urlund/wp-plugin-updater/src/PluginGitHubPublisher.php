@@ -36,10 +36,17 @@ class PluginGitHubPublisher
             }
             $release = $this->findRelease($version);
             if (!$release) {
-                $this->error("No release found for tag $tag");
-                exit(1);
+                if (isset($this->options['create'])) {
+                    $this->info("Release not found for tag $tag, creating new release...");
+                    $release = $this->createRelease($version, $tag);
+                    $this->success("Created new release for tag $tag (ID: {$release['id']})");
+                } else {
+                    $this->error("No release found for tag $tag (use --create to create one)");
+                    exit(1);
+                }
+            } else {
+                $this->info("Found release for tag $tag (ID: {$release['id']})");
             }
-            $this->info("Found release for tag $tag (ID: {$release['id']})");
             $this->info("Uploading ZIP asset to release $tag");
             $this->uploadAsset($release['id'], $this->options['zip']);
             $this->success("Uploaded ZIP asset to release $tag");
@@ -59,6 +66,7 @@ class PluginGitHubPublisher
             'zip:',    // path to zip file
             'json:',   // path to plugin.json
             'token::', // optional, else use env
+            'create',  // create release if not found
             'help',
         ];
         $opts = getopt('h', $longopts);
@@ -115,6 +123,43 @@ class PluginGitHubPublisher
         return null;
     }
 
+    private function createRelease($version, $tag)
+    {
+        $url = "https://api.github.com/repos/{$this->options['repo']}/releases";
+        $data = [
+            'tag_name' => $tag,
+            'name' => $tag,
+            'body' => "Release $version",
+            'draft' => false,
+            'prerelease' => false
+        ];
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'GitHubReleasePublisher');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: token ' . $this->getToken(),
+            'Accept: application/vnd.github+json',
+            'Content-Type: application/json',
+        ]);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        
+        $result = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        
+        if ($result === false) {
+            throw new \Exception("Failed to create release: " . curl_error($ch));
+        }
+        
+        if ($httpCode >= 300) {
+            throw new \Exception("Failed to create release: HTTP $httpCode\n" . $result);
+        }
+        
+        $release = json_decode($result, true);
+        return $release;
+    }
+
     private function uploadAsset($releaseId, $zipPath)
     {
         $repo = $this->options['repo'];
@@ -156,12 +201,13 @@ class PluginGitHubPublisher
         echo "GitHub Release Publisher\n";
         echo "========================\n\n";
         echo "Usage:\n";
-        echo "  php src/GitHubReleasePublisher.php --repo=owner/repo --zip=dist/plugin.zip --json=dist/plugin.json [--token=ghp_xxx]\n\n";
+        echo "  php src/GitHubReleasePublisher.php --repo=owner/repo --zip=dist/plugin.zip --json=dist/plugin.json [--token=ghp_xxx] [--create]\n\n";
         echo "Options:\n";
         echo "  --repo=owner/repo   GitHub repository (required)\n";
         echo "  --zip=FILE         Path to plugin ZIP file (required)\n";
         echo "  --json=FILE        Path to plugin.json (required, for version)\n";
         echo "  --token=TOKEN      GitHub token (optional, else use GITHUB_TOKEN env)\n";
+        echo "  --create           Create release if it doesn't exist\n";
         echo "  --help             Show this help\n";
     }
 
