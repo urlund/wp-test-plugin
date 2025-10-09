@@ -30,10 +30,14 @@ Urlund\WordPress\PluginUpdater\GitHubRepository::getInstance('wp-test-plugin/wp-
     // 'max_file_size'  => 52428800,            // Optional: Maximum ZIP file size in bytes (default: 50MB)
 ));
 
+$plugin_data = get_file_data(__FILE__, array(
+    'Version'     => 'Version',
+));
+
 /**
  * Currently plugin version.
  */
-define('WP_TEST_PLUGIN_VERSION', '1.0.8');
+define('WP_TEST_PLUGIN_VERSION', $plugin_data['Version']);
 
 /**
  * The code that runs during plugin activation.
